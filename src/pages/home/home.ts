@@ -27,8 +27,6 @@ export class HomePage {
         this.navCtrl.setRoot('CategoriasPage');
       }, error => {}
     )
-    console.log(this.creds);
-    
   }
 
  ionViewWillEnter(){
