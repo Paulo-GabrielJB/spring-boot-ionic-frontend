@@ -13,7 +13,7 @@ export class HomePage {
 
   }
 
-  public login(){
+  login(){
     this.navCtrl.setRoot('CategoriasPage');
   }
 
