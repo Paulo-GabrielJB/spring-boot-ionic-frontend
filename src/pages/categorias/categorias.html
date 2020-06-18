@@ -8,9 +8,10 @@
 </ion-header>
 
 <ion-content padding>
-    <ol>
-      <li *ngFor="let cat of categorias">
-        Codigo: {{cat.id}}, nome: {{cat.nome}}
-      </li>
-    </ol>
+  <button ion-item *ngFor="let item of items">
+    <ion-thumbnail item-start>
+      <img src="{{bucketUrl}}/cat{{item.id}}.jpg">
+    </ion-thumbnail>
+    <h2>{{item.nome}}</h2>
+  </button>
 </ion-content>
