@@ -22,6 +22,16 @@ export class AuthService {
         });
     }
 
+
+    refreshToken() : Observable<any>{
+        return this.http.post(`${API_CONFIG.baseUrl}/auth/refresh_token`, 
+        {},
+        {
+            observe: 'response',
+            responseType: 'text',
+        });
+    }
+
     successfullLoogin(authorizationValue: string){
         let token: string  = authorizationValue.substring(7);
         let email: string = jwt_decode(token).sub
