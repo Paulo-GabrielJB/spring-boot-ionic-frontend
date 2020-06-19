@@ -32,7 +32,7 @@ export class AuthService {
         });
     }
 
-    successfullLoogin(authorizationValue: string){
+    successfullLoogin(authorizationValue: string): void{
         let token: string  = authorizationValue.substring(7);
         let email: string = jwt_decode(token).sub
         let user : LocalUser = {
@@ -42,7 +42,7 @@ export class AuthService {
         this.storageService.setLocalUser(user);
     }
 
-    logout(){
+    logout(): void{
         this.storageService.setLocalUser(null);
     }
 

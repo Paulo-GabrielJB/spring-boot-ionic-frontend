@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, Alert } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CidadeService } from '../../services/domain/cidade.service';
 import { EstadoService } from '../../services/domain/estado.service';
 import { EstadoDTO } from '../../models/estado.dto';
 import { CidadeDTO } from '../../models/cidade.dto';
+import { ClienteService } from '../../services/domain/cliente.service';
 
 @IonicPage()
 @Component({
@@ -22,12 +23,14 @@ export class SignupPage {
     public navParams: NavParams, 
     public formBuilder: FormBuilder,
     public cidadeService: CidadeService,
-    public estadoService: EstadoService) {
+    public estadoService: EstadoService,
+    public clienteService: ClienteService,
+    public alertCtrl: AlertController) {
 
       this.formGroup = this.formBuilder.group({
         nome: ['Test', [Validators.required, Validators.minLength(5), Validators.maxLength(120)]],
         email: ['teste@gmail.com', [Validators.required, Validators.email]],
-        tipo: ['1', [Validators.required]],
+        tipoCliente: ['0', [Validators.required]],
         cpfOuCnpj: ['71213638011', [Validators.required, Validators.minLength(11), Validators.maxLength(14)]],
         senha: ['123', [Validators.required]],
         logradouro: ['Rua a', [Validators.required]],
@@ -44,13 +47,35 @@ export class SignupPage {
 
   }
 
-  singupUser(event: Event) {
+  singupUser(event: Event): void {
     event.preventDefault();
-    console.log(event);
+    this.clienteService.insert(this.formGroup.value).subscribe(
+      response => 
+        this.showInsertOk()
+      ,
+       error => {}
+    )
     return;
   }
 
-  updateCidades() {
+  showInsertOk(): void {
+    let alert: Alert = this.alertCtrl.create({
+      title: 'Sucesso',
+      message: 'Cadastro efetuado com sucesso',
+      enableBackdropDismiss: false,
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  updateCidades(): void {
     let codigoEstado: string = this.formGroup.value.codigoEstado;
     this.cidadeService.findAll(codigoEstado).subscribe(
       response => {
@@ -61,7 +86,7 @@ export class SignupPage {
     );
   }
 
-  ionViewDidLoad(){
+  ionViewDidLoad(): void{
     this.estadoService.findAll().subscribe(
       response => {
         this.estados = response;

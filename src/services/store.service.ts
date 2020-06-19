@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { LocalUser } from "../models/local_user";
 import { STORAGE_KEYS } from "../config/storage_keys.config";
-import { stringify } from "@angular/core/src/util";
 
 @Injectable()
 export class StorageService {
@@ -17,7 +16,7 @@ export class StorageService {
 
     }
 
-    setLocalUser(obj: LocalUser){
+    setLocalUser(obj: LocalUser): void{
         if(obj == null)
             localStorage.removeItem(STORAGE_KEYS.localUseer);
         else

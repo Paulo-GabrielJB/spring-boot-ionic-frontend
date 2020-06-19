@@ -20,21 +20,21 @@
 
       <p class="danger" *ngIf="formGroup.controls['email'].dirty && formGroup.controls['email'].errors" margin-left>Valor invalido</p>
 
-      <ion-list radio-group formControlName="tipo">
+      <ion-list radio-group formControlName="tipoCliente">
         <ion-list-header>
           Tipoo de cliente
         </ion-list-header>
         <ion-item>
           <ion-label>Pessoa fisica</ion-label>
-          <ion-radio checked="true" value="1"></ion-radio>
+          <ion-radio checked="true" value="0"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>Pessoa Juridica</ion-label>
-          <ion-radio value="2"></ion-radio>
+          <ion-radio value="1"></ion-radio>
         </ion-item>
       </ion-list>
 
-      <p class="danger" *ngIf="formGroup.controls['tipo'].dirty && formGroup.controls['tipo'].errors" margin-left>Valor invalido</p>
+      <p class="danger" *ngIf="formGroup.controls['tipoCliente'].dirty && formGroup.controls['tipoCliente'].errors" margin-left>Valor invalido</p>
 
       <ion-item>
         <ion-label stacked>CPF ou CNPJ*</ion-label>

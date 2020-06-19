@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { StorageService } from "../services/store.service";
 import { AlertController, Alert } from "ionic-angular";
+import { FieldMessage } from "../models/fieldmessage";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor{
@@ -33,6 +34,9 @@ export class ErrorInterceptor implements HttpInterceptor{
                 case 403:
                     this.handle403();
                     break;
+                case 422:
+                    this.handle422(errorObj);
+                    break;
                 default:
                     this.handleDefaultError(errorObj);
             }
@@ -41,7 +45,7 @@ export class ErrorInterceptor implements HttpInterceptor{
         }) as  any;
     }
 
-    handle401(){
+    handle401(): void{
         let alert: Alert = this.alertCtrl.create({
             title: 'Erro 401: falha de autenticação',
             message: 'Email ou senha incorretos',
@@ -55,11 +59,25 @@ export class ErrorInterceptor implements HttpInterceptor{
         alert.present();
     }
 
-    handle403(){
+    handle403(): void{
         this.storageService.setLocalUser(null);
     }
 
-    handleDefaultError(errorObj: any) {
+    handle422(errorObj: any): void{
+        let alert: Alert = this.alertCtrl.create({
+            title: 'Erro de validacao',
+            message: this.listErrors(errorObj.erros),
+            enableBackdropDismiss: false,
+            buttons: [
+                { 
+                    text: 'OK'
+                }
+            ]
+        });
+        alert.present();
+    }
+
+    handleDefaultError(errorObj: any): void {
         let alert: Alert = this.alertCtrl.create({
             title: `Erro ${errorObj.status}: ${errorObj.error}`,
             message: errorObj.message,
@@ -71,6 +89,13 @@ export class ErrorInterceptor implements HttpInterceptor{
             ]
         });
         alert.present();
+    }
+
+    listErrors(messages: FieldMessage[]): string {
+        let s: string = '';
+        for(let i: number = 0; i < messages.length; i++)
+            s = s + "<p><strong>" + messages[i].fieldName + ":</strong> " + messages[i].message + "</p>";
+        return s;
     }
 
 }

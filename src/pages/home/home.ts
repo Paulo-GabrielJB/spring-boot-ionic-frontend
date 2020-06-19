@@ -20,7 +20,7 @@ export class HomePage {
 
   }
 
-  login(){
+  login(): void{
     this.authService.authenticate(this.creds).subscribe(
       response => {
         this.authService.successfullLoogin(response.headers.get('Authorization'));
@@ -29,19 +29,19 @@ export class HomePage {
     )
   }
 
-  signup(){
+  signup(): void{
     this.navCtrl.push('SignupPage');
   }
 
- ionViewWillEnter(){
+ ionViewWillEnter(): void{
    this.menu.swipeEnable(false);
  }
 
- ionViewDidLeave(){
+ ionViewDidLeave(): void{
    this.menu.swipeEnable(true);
  }
 
- ionViewDidEnter(){
+ ionViewDidEnter(): void{
   this.authService.refreshToken().subscribe(
     response => {
       this.authService.successfullLoogin(response.headers.get('Authorization'));

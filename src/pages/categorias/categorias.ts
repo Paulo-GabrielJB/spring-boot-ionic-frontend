@@ -18,7 +18,7 @@ export class CategoriasPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private categoriaService: CategoriaService) {
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad(): void {
     this.categoriaService.findAll().subscribe(response => this.items = response, error => {});
   }
 

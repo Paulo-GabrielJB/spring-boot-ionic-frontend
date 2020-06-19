@@ -22,7 +22,7 @@ export class ProfilePage {
     public clienteService: ClienteService) {
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad(): void {
     let localUser: LocalUser = this.storageService.getLocalUser();
 
     if(localUser && localUser.email)
@@ -39,7 +39,7 @@ export class ProfilePage {
       this.navCtrl.setRoot('HomePage');
   }
 
-  getImageIfExists(){
+  getImageIfExists(): void{
     this.clienteService.getImageFromBucket(this.cliente.id).subscribe(
       response => this.cliente.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.cliente.id}.jpg`, 
     error => {});
