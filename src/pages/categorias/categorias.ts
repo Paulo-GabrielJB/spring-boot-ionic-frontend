@@ -22,4 +22,8 @@ export class CategoriasPage {
     this.categoriaService.findAll().subscribe(response => this.items = response, error => {});
   }
 
+  showProdutos(): void{
+    this.navCtrl.push('ProdutosPage');
+  }
+
 }
