@@ -19,4 +19,9 @@ export class ProdutoService {
         let url: string = `${API_CONFIG.bucketBaseUrl}/prod${id}.jpg`;
         return this.http.get(url, {responseType: 'blob'});
     }
+    
+    getSmallImageFromBucket(id: string): Observable<any> {
+        let url: string = `${API_CONFIG.bucketBaseUrl}/prod${id}-small.jpg`;
+        return this.http.get(url, {responseType: 'blob'});
+    }
 }
