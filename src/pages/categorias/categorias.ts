@@ -22,8 +22,8 @@ export class CategoriasPage {
     this.categoriaService.findAll().subscribe(response => this.items = response, error => {});
   }
 
-  showProdutos(): void{
-    this.navCtrl.push('ProdutosPage');
+  showProdutos(codigoCategoria: string): void{
+    this.navCtrl.push('ProdutosPage', { codigoCategoria });
   }
 
 }
