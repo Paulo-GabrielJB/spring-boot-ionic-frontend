@@ -1,3 +1,4 @@
 export const STORAGE_KEYS = {
-    localUseer: "localUser"
+    localUseer: "localUser",
+    cart: "cart"
 }

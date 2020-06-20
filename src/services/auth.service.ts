@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { API_CONFIG } from "../config/api.config";
 import { Observable } from "rxjs";
 import { LocalUser } from '../models/local_user';
-import { StorageService } from "./store.service";
+import { StorageService } from "./storage.service";
 import * as jwt_decode from 'jwt-decode';
 
 @Injectable()

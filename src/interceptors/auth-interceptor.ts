@@ -1,7 +1,7 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HTTP_INTERCEPTORS, HttpEvent } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
-import { StorageService } from "../services/store.service";
+import { StorageService } from "../services/storage.service";
 import { LocalUser } from "../models/local_user";
 import { API_CONFIG } from "../config/api.config";
 
