@@ -6,11 +6,15 @@ import { Observable } from "rxjs";
 import { LocalUser } from '../models/local_user';
 import { StorageService } from "./storage.service";
 import * as jwt_decode from 'jwt-decode';
+import { CartService } from "./cart.service";
 
 @Injectable()
 export class AuthService {
 
-    constructor(public http: HttpClient, public storageService: StorageService) {
+    constructor(
+        public http: HttpClient, 
+        public storageService: StorageService,
+        public cartService: CartService) {
     }
 
     authenticate(creds : CredenciaisDTO) : Observable<any>{
@@ -40,6 +44,7 @@ export class AuthService {
             email
         }
         this.storageService.setLocalUser(user);
+        this.cartService.createOrClearCart();
     }
 
     logout(): void{

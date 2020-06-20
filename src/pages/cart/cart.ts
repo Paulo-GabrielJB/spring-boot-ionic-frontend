@@ -24,6 +24,26 @@ export class CartPage {
     public produtoService: ProdutoService) {
   }
 
+  removeItem(produto: ProdutoDTO): void{
+    this.items = this.cartService.removeProduto(produto).items;
+  }
+
+  increaseQuantity(produto: ProdutoDTO): void{
+    this.items = this.cartService.increaseQuantity(produto).items;
+  }
+
+  decreaseQuantity(produto: ProdutoDTO): void{
+    this.items = this.cartService.decreaseQuantity(produto).items;
+  }
+
+  total(): number{
+    return this.cartService.total();
+  }
+
+  goOn(): void{
+    this.navCtrl.setRoot('CategoriasPage');
+  }
+
   loadImageUrls(): void{
     for(let i: number = 0; i < this.items.length; i++){
       let item: ProdutoDTO = this.items[i].produto;
