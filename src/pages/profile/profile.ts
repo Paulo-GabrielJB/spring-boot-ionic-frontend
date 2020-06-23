@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { LocalUser } from '../../models/local_user';
 import { StorageService } from '../../services/storage.service';
 import { ClienteDTO } from '../../models/cliente.dto';
@@ -19,24 +19,8 @@ export class ProfilePage {
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, 
     public storageService: StorageService,
-    public clienteService: ClienteService) {
-  }
-
-  ionViewDidLoad(): void {
-    let localUser: LocalUser = this.storageService.getLocalUser();
-
-    if(localUser && localUser.email)
-      this.clienteService.findByEmail(localUser.email).subscribe(
-        response => {
-          this.cliente = response; 
-          this.getImageIfExists();
-        }, 
-        error => {
-          if(error.status == 403)
-            this.navCtrl.setRoot('HomePage');
-        });
-    else
-      this.navCtrl.setRoot('HomePage');
+    public clienteService: ClienteService,
+    public loadingCtrl: LoadingController) {
   }
 
   getImageIfExists(): void{
@@ -45,4 +29,34 @@ export class ProfilePage {
     error => {});
   }
 
+  presentLoading(): Loading {
+    let loader: Loading = this.loadingCtrl.create({
+      content: "Aguarde..."
+    });
+    loader.present();
+    return loader;
+  }
+
+  ionViewDidLoad(): void {
+    let localUser: LocalUser = this.storageService.getLocalUser();
+    let loader: Loading = this.presentLoading();
+    if(localUser && localUser.email)
+      this.clienteService.findByEmail(localUser.email).subscribe(
+        response => {
+          this.cliente = response; 
+          this.getImageIfExists();
+          loader.dismiss();
+        }, 
+        error => {
+          if(error.status == 403){
+            this.navCtrl.setRoot('HomePage');
+            loader.dismiss();
+          }
+        });
+    else{
+      loader.dismiss();
+      this.navCtrl.setRoot('HomePage');
+    }
+  }
+  
 }

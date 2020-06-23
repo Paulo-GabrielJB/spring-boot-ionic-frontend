@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { EnderecoDTO } from '../../models/endereco.dto';
 import { ClienteService } from '../../services/domain/cliente.service';
 import { StorageService } from '../../services/storage.service';
@@ -23,7 +23,8 @@ export class PickAddressPage {
     public navParams: NavParams,
     public clienteService: ClienteService,
     public storageService: StorageService,
-    public cartService: CartService) {
+    public cartService: CartService,
+    public loadingCtrl: LoadingController) {
   }
 
   nextPage(endereco: EnderecoDTO): void{
@@ -33,8 +34,17 @@ export class PickAddressPage {
     this.navCtrl.push('PaymentPage', { pedido: this.pedido });
   }
 
+  presentLoading(): Loading {
+    let loader: Loading = this.loadingCtrl.create({
+      content: "Aguarde..."
+    });
+    loader.present();
+    return loader;
+  }
+
   ionViewDidLoad(): void {
     let localUser: LocalUser = this.storageService.getLocalUser();
+    let loader: Loading = this.presentLoading();
     if(localUser && localUser.email)
       this.clienteService.findByEmail(localUser.email).subscribe(
         response => {
@@ -55,10 +65,13 @@ export class PickAddressPage {
               }
             })
           }
+          loader.dismiss();
         }, 
         error => {
-          if(error.status == 403)
+          if(error.status == 403){
+            loader.dismiss();
             this.navCtrl.setRoot('HomePage');
+          }
         });
     else
       this.navCtrl.setRoot('HomePage');

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { PedidoDTO } from '../../models/pedido.dto';
 import { ClienteDTO } from '../../models/cliente.dto';
 import { CartItem } from '../../models/cart-item';
@@ -26,19 +26,24 @@ export class OrderConfirmationPage {
     public navParams: NavParams,
     public clienteService: ClienteService,
     public cartService: CartService,
-    public pedidoService: PedidoService) {
+    public pedidoService: PedidoService,
+    public loadingCtrl: LoadingController) {
     this.pedido = navParams.get('pedido');
   }
 
   checkout(): void {
+    let loader: Loading = this.presentLoading();
     this.pedidoService.insert(this.pedido).subscribe(
       response => {
         this.pedido.id = response.id;
         this.cartService.createOrClearCart();
+        loader.dismiss();
       },
       erro => {
-        if(erro.status == 403)
+        if(erro.status == 403){
+          loader.dismiss();
           this.navCtrl.setRoot('HomePage');
+        }
       }
     );
   }
@@ -55,13 +60,26 @@ export class OrderConfirmationPage {
     this.navCtrl.setRoot('CategoriasPage');
   }
 
+  presentLoading(): Loading {
+    let loader: Loading = this.loadingCtrl.create({
+      content: "Aguarde..."
+    });
+    loader.present();
+    return loader;
+  }
+
   ionViewDidLoad(): void {
+    let loader: Loading = this.presentLoading();
     this.clienteService.findById(this.pedido.cliente.id).subscribe(
       response => {
         this.cliente = response;
         this.endereco = this.cliente.enderecos.find(x => x.id == this.pedido.enderecoDeEntrega.id);
+        loader.dismiss();
       },
-      error => this.navCtrl.setRoot('HomePage')
+      error => {
+        loader.dismiss();
+        this.navCtrl.setRoot('HomePage');
+      }
     )
     this.cartItems = this.cartService.getCart().items;
   }
