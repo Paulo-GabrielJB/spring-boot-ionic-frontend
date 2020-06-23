@@ -10,9 +10,9 @@
       Selecione um endereço
     </ion-list-header>
     <button ion-item *ngFor="let item of items">
-      <h2> {{ item.logradouro }}, {{ item.numero }}</h2>
-      <p> {{ item.complemento }} {{ item.bairro }} CEP {{ item.cep }} </p>
-      <p> {{ item.cidade.nome }}, {{ item.cidade.estado.nome }}</p>
+      <h2> {{ item?.logradouro }}, {{ item?.numero }}</h2>
+      <p> {{ item?.complemento }} {{ item?.bairro }} CEP {{ item?.cep }} </p>
+      <p> {{ item?.cidade?.nome }}, {{ item?.cidade?.estado?.nome }}</p>
     </button>
   </ion-list>
 </ion-content>
