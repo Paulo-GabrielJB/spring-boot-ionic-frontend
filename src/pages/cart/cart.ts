@@ -44,6 +44,10 @@ export class CartPage {
     this.navCtrl.setRoot('CategoriasPage');
   }
 
+  checkout(): void{
+    this.navCtrl.push('PickAddressPage');
+  }
+
   loadImageUrls(): void{
     for(let i: number = 0; i < this.items.length; i++){
       let item: ProdutoDTO = this.items[i].produto;
