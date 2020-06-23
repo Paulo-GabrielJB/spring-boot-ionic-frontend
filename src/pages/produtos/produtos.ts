@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading, Refresher } from 'ionic-angular';
 import { ProdutoDTO } from '../../models/produto.dto';
 import { ProdutoService } from '../../services/domain/produto.service';
 import { API_CONFIG } from '../../config/api.config';
@@ -44,8 +44,8 @@ export class ProdutosPage {
     loader.present();
     return loader;
   }
-  
-  ionViewDidLoad(): void {
+
+  loadData(): void{
     let loader: Loading = this.presentLoading();
     this.produtoService.findByCategoria(this.navParams.get('codigoCategoria')).subscribe(
       response => {
@@ -57,6 +57,17 @@ export class ProdutosPage {
         loader.dismiss();
       }
     );
+  }
+
+  doRefresh(event: Refresher): void{
+    this.loadData();
+    setTimeout(() => {
+      event.complete();
+    }, 1000);
+  }
+  
+  ionViewDidLoad(): void {
+    this.loadData();
   }
 
 }
