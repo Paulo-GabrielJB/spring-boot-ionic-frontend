@@ -54,11 +54,28 @@ export class ProfilePage {
         this.picture = 'data:image/png;base64,' + imageData;
         this.cameraOn = false;
       },
-      erro => {}
+      erro => {
+        this.cameraOn = false;
+      }
     )
   }
 
-  ionViewDidLoad(): void {
+  sendPicture(): void{
+    this.clienteService.uploadPicture(this.picture)
+      .subscribe( response => {
+        this.picture == null;
+        this.loadData();
+      }, 
+      error => {
+
+      });
+  }
+
+  cancel(): void{
+    this.picture = null;
+  }
+
+  loadData(): void{ 
     let localUser: LocalUser = this.storageService.getLocalUser();
     let loader: Loading = this.presentLoading();
     if(localUser && localUser.email)
@@ -78,6 +95,10 @@ export class ProfilePage {
       loader.dismiss();
       this.navCtrl.setRoot('HomePage');
     }
+  }
+
+  ionViewDidLoad(): void {
+    this.loadData();
   }
   
 }
