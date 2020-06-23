@@ -43,6 +43,10 @@ export class OrderConfirmationPage {
     );
   }
 
+  back(): void{
+    this.navCtrl.setRoot('CartPage');
+  }
+
   total(): number{
     return this.cartService.total();
   }
