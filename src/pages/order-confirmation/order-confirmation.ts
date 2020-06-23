@@ -33,7 +33,7 @@ export class OrderConfirmationPage {
   checkout(): void {
     this.pedidoService.insert(this.pedido).subscribe(
       response => {
-        console.log(response);
+        this.pedido.id = response.id;
         this.cartService.createOrClearCart();
       },
       erro => {
@@ -49,6 +49,10 @@ export class OrderConfirmationPage {
 
   total(): number{
     return this.cartService.total();
+  }
+
+  home(): void{
+    this.navCtrl.setRoot('CategoriasPage');
   }
 
   ionViewDidLoad(): void {
