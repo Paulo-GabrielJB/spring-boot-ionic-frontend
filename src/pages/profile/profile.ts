@@ -19,18 +19,18 @@ export class ProfilePage {
   picture: string;
   cameraOn: boolean = false;
 
-  constructor(public navCtrl: NavController, 
-    public navParams: NavParams, 
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
     public storageService: StorageService,
     public clienteService: ClienteService,
     public loadingCtrl: LoadingController,
     public camera: Camera) {
   }
 
-  getImageIfExists(): void{
+  getImageIfExists(): void {
     this.clienteService.getImageFromBucket(this.cliente.id).subscribe(
-      response => this.cliente.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.cliente.id}.jpg`, 
-    error => {});
+      response => this.cliente.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.cliente.id}.jpg`,
+      error => { });
   }
 
   presentLoading(): Loading {
@@ -60,38 +60,58 @@ export class ProfilePage {
     )
   }
 
-  sendPicture(): void{
-    this.clienteService.uploadPicture(this.picture)
-      .subscribe( response => {
-        this.picture == null;
-        this.loadData();
-      }, 
-      error => {
-
-      });
+  getGalleryPicture(): void {
+    this.cameraOn = true;
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.PNG,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+    this.camera.getPicture(options).then(
+      imageData => {
+        this.picture = 'data:image/png;base64,' + imageData;
+        this.cameraOn = false;
+      },
+      erro => {
+        this.cameraOn = false;
+      }
+    )
   }
 
-  cancel(): void{
+  sendPicture(): void {
+    this.clienteService.uploadPicture(this.picture)
+      .subscribe(response => {
+        this.picture == null;
+        this.loadData();
+      },
+        error => {
+
+        });
+  }
+
+  cancel(): void {
     this.picture = null;
   }
 
-  loadData(): void{ 
+  loadData(): void {
     let localUser: LocalUser = this.storageService.getLocalUser();
     let loader: Loading = this.presentLoading();
-    if(localUser && localUser.email)
+    if (localUser && localUser.email)
       this.clienteService.findByEmail(localUser.email).subscribe(
         response => {
-          this.cliente = response; 
+          this.cliente = response;
           this.getImageIfExists();
           loader.dismiss();
-        }, 
+        },
         error => {
-          if(error.status == 403){
+          if (error.status == 403) {
             this.navCtrl.setRoot('HomePage');
             loader.dismiss();
           }
         });
-    else{
+    else {
       loader.dismiss();
       this.navCtrl.setRoot('HomePage');
     }
@@ -100,5 +120,5 @@ export class ProfilePage {
   ionViewDidLoad(): void {
     this.loadData();
   }
-  
+
 }
